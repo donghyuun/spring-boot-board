@@ -2,6 +2,8 @@ package com.example.sbb;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,18 +23,33 @@ public class SecurityConfig {
         http.authorizeHttpRequests().requestMatchers(
                 new AntPathRequestMatcher("/**")//모든 인증되지 않은 요청을 허가
         ).permitAll()
-                .and()//H2 콘솔 예외 처리(CSRF 검증 안하도록)
+                .and()
+                    //H2 콘솔 예외 처리(CSRF 검증 안하도록)
                     .csrf().ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**"))
                 .and()
                 .headers()
                 .addHeaderWriter(new XFrameOptionsHeaderWriter(
                         XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN
-                ));
+                ))
+                .and()
+                    .formLogin()
+                    .loginPage("/user/login")//로그인 페이지의 URL -> User 컨트롤러에 해당 매핑 추가해야함
+                    .defaultSuccessUrl("/")//로그인 성공 시 이동할 URL
+                .and()
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true);
         return http.build();
     }
 
     @Bean//BCryptPasswordEncoder 객체를 빈(bean)으로 등록해서 사용
     BCryptPasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+    
+    @Bean //AuthenticationManager는 스프링 시큐리티의 인증을 담당, 작성한 UserSecurityService와 PasswordEncoder가 자동으로 설정됨
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 }
