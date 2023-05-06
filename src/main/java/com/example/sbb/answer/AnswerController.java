@@ -81,4 +81,17 @@ public class AnswerController {
         //답변 삭제 후 해당 답변이 있던 기존 페이지로 복귀 (해당 답변의 질문 id를 이용)
         return String.format("redirect:/question/detail/%s", answer.getQuestion().getId());
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/vote/{id}")
+    public String answerVote(Principal principal, @PathVariable("id") Integer id){
+        //답변글의 id를 이용해 답변 객체 찾음
+        Answer answer = this.answerService.getAnswer(id);
+        //현재 로그인된 사용자의 이름을 이용해 사용자 객체 찾음
+        SiteUser siteUser = this.userService.getUser(principal.getName());
+        //답변 객체의 추천인 집합에 사용자 객체 추가
+        this.answerService.vote(answer, siteUser);
+        //답변이 있는 질문글로 복귀
+        return String.format("redirect:/question/detail/%s", answer.getQuestion().getId());
+    }
 }

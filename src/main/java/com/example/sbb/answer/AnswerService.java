@@ -37,7 +37,7 @@ public class AnswerService {
     //답변 수정
     public void modify(Answer answer, String content){
         answer.setContent(content);
-        answer.setModifyData(LocalDateTime.now());
+        answer.setModifyDate(LocalDateTime.now());
         this.answerRepository.save(answer);
     }
 
@@ -46,4 +46,11 @@ public class AnswerService {
         this.answerRepository.delete(answer);
     }
 
+    //답변 추천
+    public void vote(Answer answer, SiteUser siteUser){
+        //해당 답변 객체의 Voter(추천인 set)에 사용자 객체 추가
+        answer.getVoter().add(siteUser);
+        //변경 사항 저장
+        this.answerRepository.save(answer);
+    }
 }

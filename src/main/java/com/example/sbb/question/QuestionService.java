@@ -51,12 +51,18 @@ public class QuestionService {
     public void modify(Question question, String subject, String content){
         question.setSubject(subject);
         question.setContent(content);
-        question.setModifyData(LocalDateTime.now());
+        question.setModifyDate(LocalDateTime.now());
         this.questionRepository.save(question);//id 가 같으므로 새로 등록되는게 아니라 "수정"됨
     }
 
     //질문 삭제, question 객체를 입력받아 해당 질문 데이터를 삭제
     public void delete(Question question){
         this.questionRepository.delete(question);
+    }
+
+    //질문 추천
+    public void vote(Question question, SiteUser siteUser){
+        question.getVoter().add(siteUser);//질문의 Voter 속성(추천인 집합)에 사용자 객체를 추가
+        this.questionRepository.save(question);
     }
 }

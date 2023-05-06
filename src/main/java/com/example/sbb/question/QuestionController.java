@@ -1,5 +1,6 @@
 package com.example.sbb.question;
 
+import java.awt.print.Printable;
 import java.security.Principal;
 import com.example.sbb.user.SiteUser;
 import com.example.sbb.user.UserService;
@@ -104,5 +105,18 @@ public class QuestionController {
         //같은 경우, 수정함
         this.questionService.delete(question);
         return "redirect:/";
+    }
+
+    @PreAuthorize("isAuthenticated()")//로그인이 필요한 메서드
+    @GetMapping("/vote/{id}")
+    public String questionVote(Principal principal, @PathVariable("id") Integer id){
+        //질문글의 id를 이용해 질문 객체 찾음
+        Question question = this.questionService.getQuestion(id);
+        //현재 로그인된 사용자의 이름을 이용해 사용자 객체 찾음
+        SiteUser siteUser = this.userService.getUser(principal.getName());
+        //질문 객체의 추천인 집합에 사용자 객체 추가
+        this.questionService.vote(question, siteUser);
+        //해당 질문글로 다시 복귀
+        return String.format("redirect:/question/detail/%s", id);
     }
 }
