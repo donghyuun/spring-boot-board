@@ -1,0 +1,15 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container">
+    <h5 class="my-3 border-bottom pb-2">답변 수정</h5>
+    <!--form 태그의 action 속성없이 submit 하는 경우, 현재의 URL을 기준으로 전송된다. 따라서 답변 등록인경우와, 답변 수정인 경우가 하나의 템플릿에서 구별된다.-->
+    <form th:object="${answerForm}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <div th:replace="~{form_errors::formErrorsFragment}"></div>
+        <div class="mb-3">
+            <label for="content" class="form-label">내용</label>
+            <textarea th:field="*{content}" class="form-control" rows="10"></textarea>
+        </div>
+        <input type="submit" value="저장하기" class="btn btn-primary my-2">
+    </form>
+</div>
+</html>
