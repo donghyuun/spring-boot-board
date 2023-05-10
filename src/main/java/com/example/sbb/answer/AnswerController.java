@@ -38,8 +38,8 @@ public class AnswerController {
             return "question_detail";
 
         }
-        this.answerService.create(question, answerForm.getContent(), siteUser);//답변, 답변내용, 답변자
-        return String.format("redirect:/question/detail/%s", id);//제자리 유지
+        Answer answer = this.answerService.create(question, answerForm.getContent(), siteUser);//답변, 답변내용, 답변자
+        return String.format("redirect:/question/detail/%s#answer_%s", answer.getQuestion().getId(), answer.getId());//제자리 유지
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -67,7 +67,7 @@ public class AnswerController {
         }
         this.answerService.modify(answer, answerForm.getContent());
         //답변 삭제 후 해당 답변이 있는 기존 페이지로 복귀 (해당 답변의 질문 id를 이용)
-        return String.format("redirect:/question/detail/%s", answer.getQuestion().getId());
+        return String.format("redirect:/question/detail/%s$answer_%s", answer.getQuestion().getId(), answer.getId());
     }
 
     @PreAuthorize("isAuthenticated()")//로그인이 필요한 메서드로 설정
@@ -91,7 +91,7 @@ public class AnswerController {
         SiteUser siteUser = this.userService.getUser(principal.getName());
         //답변 객체의 추천인 집합에 사용자 객체 추가
         this.answerService.vote(answer, siteUser);
-        //답변이 있는 질문글로 복귀
-        return String.format("redirect:/question/detail/%s", answer.getQuestion().getId());
+        //답변이 있는 질문글(해당 답변이 있던 위치)로 복귀
+        return String.format("redirect:/question/detail/%s#answer_%s", answer.getQuestion().getId(), answer.getId());
     }
 }

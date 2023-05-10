@@ -4,7 +4,7 @@
     <h2 class="border-bottom py-2" th:text="${question.subject}"></h2>
     <div class="card my-3">
         <div class="card-body">
-            <div class="card-text" style="white-space: pre-line;" th:text="${question.content}"></div>
+            <div class="card-text" th:utext="${@commonUtil.markdown(question.content)}"></div>
             <div class="d-flex justify-content-end">
                 <div th:if="${question.modifyDate != null}" class="badge bg-light text-dark p-2 text-start mx-3">
                     <div class="mb-2">modified at</div>
@@ -45,8 +45,9 @@
         th:text="|${#lists.size(question.answerList)}개의 답변이 있습니다.|"></h5>
     <!-- 답변 반복 시작 -->
     <div class="card my-3" th:each="answer : ${question.answerList}">
+        <a th:id="|answer_${answer.id}|"></a><!--앵커 태그 추가, 지정한 앵커 태그로 이동하기 위해-->
         <div class="card-body">
-            <div class="card-text" style="white-space: pre-line;" th:text="${answer.content}"></div>
+            <div class="card-text" th:utext="${@commonUtil.markdown(answer.content)}"></div>
             <div class="d-flex justify-content-end">
                 <div th:if="${answer.modifyDate != null}" class="badge bg-light text-dark p-2 text-start mx-3">
                     <div class="mb-2">modified at</div>
