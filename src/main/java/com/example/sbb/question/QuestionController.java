@@ -35,9 +35,9 @@ public class QuestionController {
 
     @GetMapping(value = "/detail/{id}")
     public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm){
-       Question question = this.questionService.getQuestion(id);
-       model.addAttribute("question", question);
-       return "question_detail";
+        Question question = this.questionService.getQuestion(id);
+        model.addAttribute("question", question);
+        return "question_detail";
     }
 
     @PreAuthorize("isAuthenticated()")//로그인이 필요한 메서드로 설정, 로그아웃인 상태인 경우 로그인페이지로 이동 (로그인 판별기능)

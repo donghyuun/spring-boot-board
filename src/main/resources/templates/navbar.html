@@ -16,7 +16,29 @@
         <li class="nav-item">
           <a class="nav-link" th:href="@{/user/signup}">회원가입</a>
         </li>
+        <li class="nav-item">
+          <form id="myForm" action="/music" method="post">
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+            <input type="text" id="inputValue" name="inputValue" placeholder="값을 입력하세요">
+            <button type="submit">전송</button>
+          </form>
+        </li>
       </ul>
     </div>
   </div>
+
+  <script>
+    const form = document.getElementById("myForm");
+    form.addEventListener("submit", function(event) {
+      event.preventDefault(); // 기본 동작인 페이지 전환을 막음
+
+      const inputValue = document.getElementById("inputValue").value; // input 태그의 값을 가져옴
+
+      // 값이 존재할 경우에만 전송
+      if (inputValue) {
+        form.action = "/music?value=" + encodeURIComponent(inputValue); // action 속성에 전송할 주소 설정
+        form.submit(); // form 전송
+      }
+    });
+  </script>
 </nav>

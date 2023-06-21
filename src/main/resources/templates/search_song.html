@@ -1,0 +1,53 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Your HTML Page</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #0d6efd;
+    }
+
+    th {
+      background-color: #0d6efd;
+    }
+  </style>
+</head>
+<body>
+<h1>Searched Music List</h1>
+<table>
+  <thead>
+  <tr>
+    <th>Brand</th>
+    <th>No</th>
+    <th>Title</th>
+    <th>Singer</th>
+    <th>Composer</th>
+    <th>Lyricist</th>
+    <th>Release</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="song : ${songs}">
+    <td th:text="${song.brand}"></td>
+    <td th:text="${song.no}"></td>
+    <td th:text="${song.title}"></td>
+    <td th:text="${song.singer}"></td>
+    <td th:text="${song.composer}"></td>
+    <td th:text="${song.lyricist}"></td>
+    <td th:text="${song.release}"></td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

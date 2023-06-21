@@ -39,4 +39,4 @@ public interface QuestionRepository extends JpaRepository<Question, Integer>{
     //@Query 에너테이션이 적용된 findAllByKeyword 메서드,
     //쿼리에 파라미터로 전달할 kw 문자열은 메서드의 매개변수에 @Param 에너테이션을 사용해야 한다. kw문자열은 @Query 안에서 :kw로 참조됨
     Page<Question> findAllByKeyword(@Param("kw") String kw, Pageable pageable);
- }
+}

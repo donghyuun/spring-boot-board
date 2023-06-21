@@ -57,6 +57,7 @@ public class AnswerController {
     @PreAuthorize("isAuthenticated()")//로그인이 필요한 메서드로 설정
     @PostMapping("/modify/{id}")
     public String answerModify(@Valid AnswerForm answerForm, BindingResult bindingResult, @PathVariable("id") Integer id, Principal principal){
+        System.out.println("수정 요청이 전달되었습니다." + id);
         if(bindingResult.hasErrors()){
             return "answer_form";
         }
@@ -67,7 +68,7 @@ public class AnswerController {
         }
         this.answerService.modify(answer, answerForm.getContent());
         //답변 삭제 후 해당 답변이 있는 기존 페이지로 복귀 (해당 답변의 질문 id를 이용)
-        return String.format("redirect:/question/detail/%s$answer_%s", answer.getQuestion().getId(), answer.getId());
+        return String.format("redirect:/question/detail/%s", answer.getQuestion().getId(), answer.getId());
     }
 
     @PreAuthorize("isAuthenticated()")//로그인이 필요한 메서드로 설정
